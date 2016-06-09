@@ -21,13 +21,16 @@ Standards/Conventions used as inspiration:
 
 ## URIs
 
-Version granularity is up to implementation. However, the base URI for an
-entity must include a version.
+The APIs shall be versioned per entity.
+The APIs shall be versioned with a major version only.
+Multiple versions of an API may be supported.
+
+The base URI for an entity must include a version.
 
 The base URI for a given resource type is based on the *singular* name of the
-resource. Example:
+resource and the API version. Example:
 
-    https://example.com/rest/v1/user
+    https://example.com/rest/user/v1
 
 ## Operations Against a Resource Type
 
