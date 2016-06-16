@@ -19,6 +19,38 @@ Standards/Conventions used as inspiration:
  - [JSend](http://labs.omniti.com/labs/jsend)
   - API response conventions
 
+## Authentication
+
+Authentication shall be done via TLS client certificates. The principal shall
+be extracted from the client certificate of each request.
+
+### Delegation
+
+Implementations may support delegation as follows.
+
+Principals with a special role (TBD), may send requests on behalf of any other
+principal. The delegated principal shall be identified in the `Authorization`
+HTTP header, using the `Bearer` auth-scheme (as defined in the
+[OAuth 2.0 bearer token spec](http://tools.ietf.org/html/rfc6750#section-2.1)).
+
+The contents of the `Bearer token` are up to implementation, but the `Bearer
+token` must identify the delegated principal. That is to say, the
+implementation may an OAuth 2.0 implementation, or the implemenation may be a
+simpler one, for example, the implementation might just have the token be
+the principal itself.
+
+Example:
+
+    Authorization: Bearer jdoe
+
+## Authorization
+
+Authorization shall be implemented on a per-endpoint basis.
+
+If delegation is supported per above, then effective authorization shall be
+determined by a logical AND; i.e. both the primary principal and the delegated
+principal must have authorization in order for the request to be authorized.
+
 ## URIs
 
 The APIs shall be versioned per entity.
