@@ -36,13 +36,13 @@ resource and the API version. Example:
 
 The following operations may be supported:
 
-| HTTP Operation | Description            | Query Parameters              | Request Body | Response Body  |
-|----------------|------------------------|-------------------------------|--------------|----------------|
-| `POST`         | Create new resource(s) | -                             | JSON array   | -              |
-| `PUT`          | Replace resource(s)    | -                             | JSON array   | -              |
-| `PATCH`        | Update Resource(s)     | -                             | JSON array   | -              |
-| `GET`          | List resource(s)       | `fields`,`page`,`size`,`sort` | -            | paginated list |
-| `DELETE`       | Delete ALL resources   | -                             | -            | -              |
+| HTTP Operation | Description            | Query Parameters                | Request Body | Response Body  |
+|----------------|------------------------|---------------------------------|--------------|----------------|
+| `POST`         | Create new resource(s) | -                               | JSON array   | -              |
+| `PUT`          | Replace resource(s)    | -                               | JSON array   | -              |
+| `PATCH`        | Update Resource(s)     | -                               | JSON array   | -              |
+| `GET`          | List resource(s)       | `fields`,`page`,`size`,`sort[]` | -            | paginated list |
+| `DELETE`       | Delete ALL resources   | -                               | -            | -              |
 
 Endpoints may not support all methods (i.e. a service may provide read-only
 access to a resource, or a service may not support certain operations for
@@ -84,10 +84,10 @@ The default page-size is implementation-specific.
 
 ## Sorting
 
-Sorting shall be provided via the `sort` query parameter. `sort` may be
-specified more than once in order to sort by more than one field. `sort` values
-shall be of the form `sort={field}(,{direction})` where `direction` is `asc` or
-`desc`.
+Sorting shall be provided via the `sort[]` query parameter. `sort[]` may be
+specified more than once in order to sort by more than one field. `sort[]` values
+shall be of the form `sort[]={field}(,{direction})` where `direction` is `asc` or
+`desc`. If `direction` is not specified, it will default to `asc`.
 
 ### Responses
 
@@ -95,16 +95,16 @@ The response shall be a JSON object formatted according to Spring Data REST
 conventions.Specifically, the list is returned as a pluralized field name
 under `_embedded`, and a `page` object supplies paging info. Example:
 
-```json
+```javascript
 GET /user
 
 {
   "_embedded": {
     "users": [
       {
-        ...
+        // ...
       },
-      ...
+      // ...
     ]
   },
   "page": {
@@ -188,7 +188,7 @@ Success example:
 Related resources may be exposed under additional endpoints off a 
 resource-specific endpoint. Example:
 
-    /user/{id}/posts{&fields,page,size,sort}
+    /user/{id}/posts{&fields,page,size,sort[]}
 
 ## Future/Optional Features
 
@@ -201,24 +201,24 @@ Per HAL/Spring Data REST conventions, an implementation may enable usage by
 having relationships between entities and APIs exposed via `_links` fields.
 
 Example:
-```json
+```javascript
 {
   "_links": {
     "self": {
-      "href": "https://example.com/rest/v1/user{&sort,page,size}",
+      "href": "https://example.com/rest/v1/user{&sort[],page,size}",
       "templated": true
     },
     "next": {
-      "href": "https://example.com/rest/v1/user?page=1&size=20{&sort}",
+      "href": "https://example.com/rest/v1/user?page=1&size=20{&sort[]}",
       "templated": true
     }
   },
   "_embedded": {
     "users": [
       {
-        ...
+        // ...
       },
-      ...
+      // ...
     ]
   },
   "page": {
