@@ -83,9 +83,21 @@ for `user` if listing all users is disallowed for performance reasons.
 
 ## Operations Against Specific Resources
 Specific resources will be addressed through the base URI plus the identifier
-for that resource.
+for that resource by one or more field names, as many as required to identify
+a single resource.
 
-    /user/{id}
+    /user/v1?id={id}
+    /product/v1?sku=FOO&opUnit=100
+
+If a resource is identified by a single field, then a single path parameter
+must be allowed for brevity and familiarity.
+
+    /user/v1/{id}
+
+Failure to include enough fields to identify a single resource is a client 
+error. The error response must include what fields are missing (TODO: 
+document errors in non-function responses). To query for many results, see 
+Additional Functions.
 
 The following operations may be supported:
 
@@ -161,7 +173,7 @@ corresponding to parameter names.
 Examples:
 
 ```json
-POST /user/findByLogin
+POST /user/v1/findByLogin
 
 {
   "login": "bob"
@@ -176,18 +188,19 @@ two forms:
 The non-batch form shall take any relevant parameters in a JSON object. Example:
 
 ```json
-POST /user/123/deactivate
+POST /user/v1/deactivate
 
 {
+  "id": 123,
   "reason": "Banned"
 }
 ```
 
-The batch form shall take a JSON array of objects, with each object having the
-identifier as an additional field. Example:
+The batch form shall take a JSON array of objects with the same schema. 
+Example:
 
 ```json
-POST /user/deactivate
+POST /user/v1/deactivate
 
 [
   {
@@ -220,7 +233,7 @@ Success example:
 Related resources may be exposed under additional endpoints off a 
 resource-specific endpoint. Example:
 
-    /user/{id}/posts{&fields,page,size,sort[]}
+    /user/v1/{id}/posts{&fields,page,size,sort[]}
 
 ## Future/Optional Features
 
