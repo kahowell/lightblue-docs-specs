@@ -84,7 +84,7 @@ for `user` if listing all users is disallowed for performance reasons.
 ## Operations Against Specific Resources
 Specific resources will be addressed through the base URI plus the identifier
 for that resource by one or more field names, as many as required to identify
-a single entity.
+a single resource.
 
     /user/v1?id={id}
     /product/v1?sku=FOO&opUnit=100
